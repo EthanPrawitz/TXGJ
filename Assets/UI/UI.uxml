@@ -1,0 +1,4 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" authoring-id="890703421">
+    <Style src="project://database/Assets/UI/Stylesheet.uss?fileID=7433441132597879392&amp;guid=3fa8e2c173b421605b33c3ab3f0f667b&amp;type=3#Stylesheet"/>
+    <ui:Slider label="Slider" low-value="0" high-value="100" value="100" name="" enabled="true" focusable="false" fill="true" inverted="false" style="width: 226px; -unity-text-auto-size: none; height: 39px;"/>
+</ui:UXML>
