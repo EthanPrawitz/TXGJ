@@ -1,10 +1,5 @@
 using UnityEngine;
-
-// Attach this to your player GameObject.
-// Requires: Rigidbody2D (Gravity Scale ~3-5, Freeze Rotation Z checked)
-//           A BoxCollider2D or CapsuleCollider2D
-//           A child empty GameObject named "GroundCheck" positioned at the player's feet
-//           A ground layer assigned in the Inspector
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement2D : MonoBehaviour
@@ -32,9 +27,9 @@ public class PlayerMovement2D : MonoBehaviour
 
     private Rigidbody2D rb;
     private Animator animator;               // optional, safe if null
+
     private float moveInput;
     private bool isGrounded;
-    private bool jumpPressed;
     private bool jumpHeld;
     private float coyoteTimer;
     private float jumpBufferTimer;
@@ -45,17 +40,40 @@ public class PlayerMovement2D : MonoBehaviour
         animator = GetComponent<Animator>(); // optional
     }
 
-    void Update()
-    {
-        // --- Input ---
-        moveInput = Input.GetAxisRaw("Horizontal"); // -1, 0, or 1
+    #region PlayerInput Callbacks
 
-        if (Input.GetButtonDown("Jump"))
+    // Called by PlayerInput for movement (Value axis or Vector2)
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        // Handles both 1D Float or 2D Vector2 inputs (reads X axis for horizontal)
+        if (context.valueType == typeof(Vector2))
+        {
+            moveInput = context.ReadValue<Vector2>().x;
+        }
+        else
+        {
+            moveInput = context.ReadValue<float>();
+        }
+    }
+
+    // Called by PlayerInput for jumping (Button type)
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if (context.started)
         {
             jumpBufferTimer = jumpBufferTime;
+            jumpHeld = true;
         }
-        jumpHeld = Input.GetButton("Jump");
+        else if (context.canceled)
+        {
+            jumpHeld = false;
+        }
+    }
 
+    #endregion
+
+    void Update()
+    {
         // --- Ground check ---
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
@@ -68,10 +86,7 @@ public class PlayerMovement2D : MonoBehaviour
         if (jumpBufferTimer > 0f)
             jumpBufferTimer -= Time.deltaTime;
 
-        // Facing direction is now controlled by GunAim2D (based on aim/cursor),
-        // not movement input, since the gun is part of the player sprite.
-
-        // --- Animator params (safe no-op if no Animator attached) ---
+        // --- Animator params ---
         if (animator != null)
         {
             animator.SetFloat("Speed", Mathf.Abs(moveInput));
@@ -82,14 +97,14 @@ public class PlayerMovement2D : MonoBehaviour
 
     void FixedUpdate()
     {
-        // --- Knockback: while active, skip normal horizontal control and let physics carry the impulse ---
+        // --- Knockback handling ---
         if (knockbackTimer > 0f)
         {
             knockbackTimer -= Time.fixedDeltaTime;
             return;
         }
 
-        // --- Horizontal movement (accelerate toward target speed, decelerate toward 0) ---
+        // --- Horizontal movement ---
         float targetSpeed = moveInput * moveSpeed;
         float rate = Mathf.Abs(moveInput) > 0.01f ? accelerationRate : decelerationRate;
         float newX = Mathf.MoveTowards(rb.linearVelocity.x, targetSpeed, rate * Time.fixedDeltaTime);
@@ -103,7 +118,7 @@ public class PlayerMovement2D : MonoBehaviour
             coyoteTimer = 0f;
         }
 
-        // --- Better jump arc: extra gravity when falling or short-hopping ---
+        // --- Better jump arc ---
         if (rb.linearVelocity.y < 0f && !isGrounded)
         {
             rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1f) * Time.fixedDeltaTime;
@@ -114,10 +129,6 @@ public class PlayerMovement2D : MonoBehaviour
         }
     }
 
-    // Call this from anything that damages the player (e.g. PlayerHealth) to
-    // apply a knockback impulse. Movement control is suspended for `duration`
-    // seconds so this velocity isn't instantly overwritten by normal movement.
-    // Read-only access for other scripts (e.g. an animation state controller)
     public bool IsGrounded => isGrounded;
     public Vector2 Velocity => rb.linearVelocity;
     public float MoveInput => moveInput;
@@ -128,10 +139,6 @@ public class PlayerMovement2D : MonoBehaviour
         knockbackTimer = duration;
     }
 
-    // Call with false to fully disable player control (e.g. on death) - stops
-    // Update/FixedUpdate from running and freezes physics so the character
-    // doesn't keep sliding/falling under whatever velocity it had. Call with
-    // true to restore control (e.g. on respawn).
     public void SetControlEnabled(bool value, bool zeroVelocityOnDisable = true)
     {
         enabled = value;

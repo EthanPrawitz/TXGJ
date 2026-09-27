@@ -1,11 +1,5 @@
 using UnityEngine;
-
-// Attach this to the Player GameObject (the one with the SpriteRenderer
-// that has the gun baked into it).
-// Requires: a SpriteRenderer on this same object
-//           a LineRenderer on this same object (for the laser)
-//           an empty child Transform named "GunPoint" placed roughly where
-//           the gun barrel is drawn on the sprite (facing right by default)
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(LineRenderer))]
 public class GunAim2D : MonoBehaviour
@@ -27,13 +21,12 @@ public class GunAim2D : MonoBehaviour
     [Header("Ammo")]
     public int maxAmmo = 30;
     public float reloadTime = 1.5f;
-    public KeyCode reloadKey = KeyCode.R;
     public int currentAmmo { get; private set; }
     public bool isReloading { get; private set; }
 
     [Header("Fire Camera Shake")]
     public float fireShakeDuration = 0.05f;
-    public float fireShakeMagnitude = 0.05f; // kept small - this fires often, unlike explosion shake
+    public float fireShakeMagnitude = 0.05f;
 
     private SpriteRenderer spriteRenderer;
     private LineRenderer lineRenderer;
@@ -42,6 +35,10 @@ public class GunAim2D : MonoBehaviour
     private bool facingRight = true;
     private float nextFireTime = 0f;
     private float reloadFinishTime = 0f;
+
+    // Input States tracked from PlayerInput callbacks
+    private Vector2 rawPointerPosition;
+    private bool isFirePressed;
 
     void Awake()
     {
@@ -52,22 +49,45 @@ public class GunAim2D : MonoBehaviour
         if (cam != null) cameraFollow = cam.GetComponent<CameraFollow2D>();
     }
 
+    #region PlayerInput Callbacks
+
+    // Called by PlayerInput when the Aim/Pointer action updates (Vector2 value type)
+    public void OnAim(InputAction.CallbackContext context)
+    {
+        rawPointerPosition = context.ReadValue<Vector2>();
+    }
+
+    // Called by PlayerInput when the Fire action changes (Button type)
+    public void OnFire(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            isFirePressed = true;
+        }
+        else if (context.canceled)
+        {
+            isFirePressed = false;
+        }
+    }
+
+    // Called by PlayerInput when the Reload action triggers (Button type)
+    public void OnReload(InputAction.CallbackContext context)
+    {
+        if (context.performed && !isReloading && currentAmmo < maxAmmo)
+        {
+            StartReload();
+        }
+    }
+
+    #endregion
+
     void Update()
     {
         // --- Cursor position in world space ---
-        Vector3 mouseScreenPos = Input.mousePosition;
-        mouseScreenPos.z = -cam.transform.position.z;
-        Vector3 mouseWorldPos = cam.ScreenToWorldPoint(mouseScreenPos);
+        Vector3 mouseWorldPos = cam.ScreenToWorldPoint(new Vector3(rawPointerPosition.x, rawPointerPosition.y, -cam.transform.position.z));
         mouseWorldPos.z = 0f;
 
-        // --- Flip the whole player based on cursor side (body stays upright) ---
-        // Uses localScale, NOT a Y-axis rotation and NOT spriteRenderer.flipX.
-        // A Y rotation turns the sprite's face away from the camera/2D light in
-        // 3D space, which Sprite-Lit-Default reads as backfacing and renders dark -
-        // that's what caused the unlit issue. Scale-based flipping mirrors the
-        // sprite without rotating its face away from the light, so lighting stays
-        // correct. It also auto-mirrors gunPoint's child position, so no manual
-        // offset is needed.
+        // --- Flip the whole player based on cursor side ---
         facingRight = mouseWorldPos.x >= transform.position.x;
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * (facingRight ? 1f : -1f);
@@ -84,27 +104,26 @@ public class GunAim2D : MonoBehaviour
             currentAmmo = maxAmmo;
         }
 
-        // --- Reload input (manual, only if not already full/reloading) ---
-        if (Input.GetKeyDown(reloadKey) && !isReloading && currentAmmo < maxAmmo)
-        {
-            StartReload();
-        }
-
-        // --- Fire input ---
-        bool wantsToFire = fullAuto ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0);
+        // --- Fire input handling ---
+        bool wantsToFire = fullAuto ? isFirePressed : (isFirePressed && Time.time >= nextFireTime);
         if (wantsToFire && !isReloading && currentAmmo > 0 && Time.time >= nextFireTime)
         {
             Fire(origin, direction);
             nextFireTime = Time.time + (1f / fireRate);
 
-            // Auto-reload once the mag empties
+            // Semi-auto needs to consume the press so holding doesn't trigger multiple shots
+            if (!fullAuto)
+            {
+                isFirePressed = false;
+            }
+
             if (currentAmmo <= 0)
             {
                 StartReload();
             }
         }
 
-        // --- Laser is always drawn (sight/attachment beam) regardless of firing ---
+        // --- Laser rendering ---
         DrawLaser(origin, direction);
     }
 
@@ -119,8 +138,8 @@ public class GunAim2D : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, maxLaserDistance, hitMask);
 
         Vector2 endPoint = hit.collider != null
-        ? hit.point
-        : origin + direction * maxLaserDistance;
+            ? hit.point
+            : origin + direction * maxLaserDistance;
 
         lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, origin);
@@ -133,7 +152,6 @@ public class GunAim2D : MonoBehaviour
 
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, maxLaserDistance, hitMask);
 
-        // --- Apply damage if we hit something damageable ---
         if (hit.collider != null)
         {
             IDamageable damageable = hit.collider.GetComponent<IDamageable>();
@@ -143,27 +161,17 @@ public class GunAim2D : MonoBehaviour
             }
         }
 
-        // --- Muzzle flash effect ---
         if (muzzleFlash != null)
         {
             muzzleFlash.TriggerFlash();
         }
 
-        // --- Camera shake on fire ---
-        // No dead-check needed here: SetControlEnabled(false) disables this whole
-        // script on death, so Update (and therefore Fire) can't run at all while dead.
         if (cameraFollow != null)
         {
             cameraFollow.Shake(fireShakeDuration, fireShakeMagnitude);
         }
-
-        // Bullet impact effects (sparks, hit markers, etc.) can be spawned here later,
-        // using hit.point and hit.normal if hit.collider != null.
     }
 
-    // Call with false to fully disable aiming/firing (e.g. on death) - stops
-    // Update from running and immediately hides the laser. Call with true
-    // to restore control (e.g. on respawn).
     public void SetControlEnabled(bool value)
     {
         enabled = value;
