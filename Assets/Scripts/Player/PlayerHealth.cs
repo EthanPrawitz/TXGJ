@@ -37,7 +37,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         if (cameraFollow == null && Camera.main != null) cameraFollow = Camera.main.GetComponent<CameraFollow2D>();
     }
 
-    public void TakeDamage(float amount, Vector2 sourcePosition = default)
+    public void TakeDamage(float amount, Vector2 sourcePosition = default, DamageType damageType = DamageType.Bullet)
     {
         if (Time.time < invulnerableUntil) return; // still invulnerable, ignore this hit
         if (currentHealth <= 0f) return;            // already dead

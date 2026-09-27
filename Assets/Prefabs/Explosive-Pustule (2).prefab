@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 3583053756881685241}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.07, y: -4.82, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 4.2, y: 4.2, z: 10.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8859365388481086012}
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -5812513199884146115, guid: 2385916b836ba054fb250b2be5f623c2, type: 3}
+  m_Sprite: {fileID: -6264496468850897692, guid: 9a61b907955b276989ca943322e96198, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -130,17 +130,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.028773785, y: -0.51221967}
+  m_Offset: {x: 0.0022214353, y: 0.045455508}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.4, y: 2.9}
+    oldSize: {x: 0.32, y: 0.32}
     newSize: {x: 2.42, y: 2.91}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.2761316, y: 1.8855605}
+  m_Size: {x: 0.21168512, y: 0.1532898}
   m_EdgeRadius: 0
 --- !u!95 &5715303934104870837
 Animator:
@@ -217,8 +217,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6911315758331047420}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.67, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0.095118806, w: 0.99546593}
+  m_LocalPosition: {x: 0, y: 0.054, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -272,7 +272,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 0.8
+  m_PointLightOuterRadius: 0.73208237
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1

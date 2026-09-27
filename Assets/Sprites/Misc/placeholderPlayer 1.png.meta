@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: 9a61b907955b276989ca943322e96198
+guid: 60422dbf3029c6e7cbcfdd7fdee919df
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6264496468850897692
-    second: pustule-gif-ezgif.com-gif-to-sprite-converter_0
-  - first:
-      213: -638613455974564423
-    second: pustule-gif-ezgif.com-gif-to-sprite-converter_1
-  - first:
-      213: -8459909938200891145
-    second: pustule-gif-ezgif.com-gif-to-sprite-converter_2
+      213: 571637889673743805
+    second: placeholderPlayer_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -43,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -83,7 +77,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -121,67 +115,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pustule-gif-ezgif.com-gif-to-sprite-converter_0
+      name: placeholderPlayer_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 64
+        y: 0
         width: 32
-        height: 32
+        height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4ec047df6a90019a0800000000000000
-      internalID: -6264496468850897692
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pustule-gif-ezgif.com-gif-to-sprite-converter_1
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 35be692c8ecba9677a7c7f3fdc4553f2
-      internalID: -638613455974564423
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pustule-gif-ezgif.com-gif-to-sprite-converter_2
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b0eec8a5e446259fcba41d4b7d3f7c13
-      internalID: -8459909938200891145
+      spriteID: dbd482ac1addee700800000000000000
+      internalID: 571637889673743805
       vertices: []
       indices: 
       edges: []
@@ -190,7 +140,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 36c86c17fd17d2e2385ecbe06c2a701f
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -198,13 +148,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      pustule-gif-ezgif.com-gif-to-sprite-converter_0: -6264496468850897692
-      pustule-gif-ezgif.com-gif-to-sprite-converter_1: -638613455974564423
-      pustule-gif-ezgif.com-gif-to-sprite-converter_2: -8459909938200891145
+      placeholderPlayer_0: 571637889673743805
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

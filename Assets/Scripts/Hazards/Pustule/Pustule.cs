@@ -42,7 +42,7 @@ public class Pustule : MonoBehaviour, IDamageable
         }
     }
 
-    public void TakeDamage(float amount, Vector2 sourcePosition = default)
+    public void TakeDamage(float amount, Vector2 sourcePosition = default, DamageType damageType = DamageType.Bullet)
     {
         health -= amount;
         if (health <= 0f)
@@ -100,7 +100,7 @@ public class Pustule : MonoBehaviour, IDamageable
             // --- Inner instakill radius: guaranteed lethal regardless of target's health ---
             if (distance <= instaKillRadius)
             {
-                damageable.TakeDamage(float.MaxValue, explosionPos);
+                damageable.TakeDamage(float.MaxValue, explosionPos, DamageType.Explosion);
                 continue;
             }
 
@@ -108,7 +108,7 @@ public class Pustule : MonoBehaviour, IDamageable
             float falloffRange = explosionRadius - instaKillRadius;
             float distanceIntoFalloff = distance - instaKillRadius;
             float falloff = Mathf.Lerp(1f, minDamageMultiplier, distanceIntoFalloff / falloffRange);
-            damageable.TakeDamage(explosionDamage * falloff, explosionPos);
+            damageable.TakeDamage(explosionDamage * falloff, explosionPos, DamageType.Explosion);
         }
 
         // --- Camera shake: every explosion shakes the camera, regardless of range or what it hit ---
