@@ -61,16 +61,17 @@ public class GunAim2D : MonoBehaviour
         mouseWorldPos.z = 0f;
 
         // --- Flip the whole player based on cursor side (body stays upright) ---
-        // Uses a 180-degree Y-axis ROTATION, not a scale flip or spriteRenderer.flipX.
-        // Both of those are reflections (they invert coordinate handedness), and
-        // normal-mapped lighting (Sprite-Lit-Default) doesn't recompute correctly
-        // across a reflection - the sprite renders unlit/dark on the flipped side
-        // regardless of which reflection method is used. A Y rotation is a true
-        // rotation instead, so it produces the same mirrored look on screen while
-        // keeping normal map lighting correct on both sides. It also auto-mirrors
-        // gunPoint's child position, so no manual offset is needed.
+        // Uses localScale, NOT a Y-axis rotation and NOT spriteRenderer.flipX.
+        // A Y rotation turns the sprite's face away from the camera/2D light in
+        // 3D space, which Sprite-Lit-Default reads as backfacing and renders dark -
+        // that's what caused the unlit issue. Scale-based flipping mirrors the
+        // sprite without rotating its face away from the light, so lighting stays
+        // correct. It also auto-mirrors gunPoint's child position, so no manual
+        // offset is needed.
         facingRight = mouseWorldPos.x >= transform.position.x;
-        transform.rotation = Quaternion.Euler(0f, facingRight ? 0f : 180f, 0f);
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * (facingRight ? 1f : -1f);
+        transform.localScale = scale;
 
         // --- Aim direction from the gun point to the cursor ---
         Vector2 origin = gunPoint.position;

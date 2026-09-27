@@ -117,6 +117,11 @@ public class PlayerMovement2D : MonoBehaviour
     // Call this from anything that damages the player (e.g. PlayerHealth) to
     // apply a knockback impulse. Movement control is suspended for `duration`
     // seconds so this velocity isn't instantly overwritten by normal movement.
+    // Read-only access for other scripts (e.g. an animation state controller)
+    public bool IsGrounded => isGrounded;
+    public Vector2 Velocity => rb.linearVelocity;
+    public float MoveInput => moveInput;
+
     public void ApplyKnockback(Vector2 velocity, float duration)
     {
         rb.linearVelocity = velocity;
