@@ -1,12 +1,9 @@
 using UnityEngine;
 
-// Attach to the Player GameObject (alongside PlayerMovement2D, PlayerHealth,
-// and the Animator). Drives a single Animator integer parameter ("AnimState")
-// so your Animator Controller can use simple "Any State -> X" transitions
-// with a condition of AnimState == (int)PlayerAnimState.X, Has Exit Time OFF.
-//
-// PlayerAnimState values (set these as the actual int in your Animator too):
-//   0 = Idle, 1 = Running, 2 = Jumping, 3 = Falling, 4 = Dead
+// Attach to Player GameObject.
+// Drives an Animator integer parameter ("AnimState").
+// Set up transitions in your Animator Controller as:
+// Any State -> State (Condition: AnimState Equals X, Has Exit Time: OFF, Duration: 0)
 
 public enum PlayerAnimState
 {
@@ -17,6 +14,9 @@ public enum PlayerAnimState
     Dead = 4
 }
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(PlayerMovement2D))]
+[RequireComponent(typeof(PlayerHealth))]
 public class PlayerAnimatorController : MonoBehaviour
 {
     [Header("References")]
@@ -25,9 +25,9 @@ public class PlayerAnimatorController : MonoBehaviour
     public PlayerHealth health;
 
     [Header("Tuning")]
-    public float runSpeedThreshold = 0.1f; // horizontal speed above this counts as "Running"
+    public float runSpeedThreshold = 0.1f;
 
-    private const string AnimStateParam = "AnimState";
+    private static readonly int AnimStateHash = Animator.StringToHash("AnimState");
     private PlayerAnimState currentState = PlayerAnimState.Idle;
     private bool isDead = false;
 
@@ -62,20 +62,22 @@ public class PlayerAnimatorController : MonoBehaviour
 
     void Update()
     {
-        // Once dead, stay dead - don't let any other state override it
-        // (e.g. call ResetForRespawn() below when you build a respawn flow).
+        // Block state updates if dead
         if (isDead) return;
 
         PlayerAnimState desiredState;
 
+        // Airborne evaluation
         if (!movement.IsGrounded)
         {
             desiredState = movement.Velocity.y > 0f ? PlayerAnimState.Jumping : PlayerAnimState.Falling;
         }
+        // Grounded movement evaluation (reads velocity instead of raw input to sync with physics)
         else if (Mathf.Abs(movement.Velocity.x) > runSpeedThreshold)
         {
             desiredState = PlayerAnimState.Running;
         }
+        // Idle evaluation
         else
         {
             desiredState = PlayerAnimState.Idle;
@@ -86,17 +88,15 @@ public class PlayerAnimatorController : MonoBehaviour
 
     void SetState(PlayerAnimState newState)
     {
-        if (newState == currentState) return; // avoid redundant Animator calls every frame
+        if (newState == currentState) return; // Prevent redundant calls
 
         currentState = newState;
         if (animator != null)
         {
-            animator.SetInteger(AnimStateParam, (int)newState);
+            animator.SetInteger(AnimStateHash, (int)newState);
         }
     }
 
-    // Call this when building your respawn flow, alongside resetting health,
-    // re-enabling PlayerMovement2D/GunAim2D, etc.
     public void ResetForRespawn()
     {
         isDead = false;

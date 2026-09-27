@@ -26,7 +26,6 @@ public class PlayerMovement2D : MonoBehaviour
     private float knockbackTimer = 0f;       // while > 0, normal horizontal control is suspended
 
     private Rigidbody2D rb;
-    private Animator animator;               // optional, safe if null
 
     private float moveInput;
     private bool isGrounded;
@@ -37,7 +36,6 @@ public class PlayerMovement2D : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>(); // optional
     }
 
     #region PlayerInput Callbacks
@@ -75,7 +73,10 @@ public class PlayerMovement2D : MonoBehaviour
     void Update()
     {
         // --- Ground check ---
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        if (groundCheck != null)
+        {
+            isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        }
 
         // --- Timers ---
         if (isGrounded)
@@ -85,14 +86,6 @@ public class PlayerMovement2D : MonoBehaviour
 
         if (jumpBufferTimer > 0f)
             jumpBufferTimer -= Time.deltaTime;
-
-        // --- Animator params ---
-        if (animator != null)
-        {
-            animator.SetFloat("Speed", Mathf.Abs(moveInput));
-            animator.SetBool("IsGrounded", isGrounded);
-            animator.SetFloat("VerticalVelocity", rb.linearVelocity.y);
-        }
     }
 
     void FixedUpdate()

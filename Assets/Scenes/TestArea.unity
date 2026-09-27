@@ -1242,6 +1242,10 @@ PrefabInstance:
       propertyPath: explosionEffectPrefab
       value: 
       objectReference: {fileID: 2892374319492241680, guid: b0cd241ba68ff52e38760352702647c0, type: 3}
+    - target: {fileID: 5715303934104870837, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 46efe1fc45582654a8191e2e3db8a5d7, type: 2}
     - target: {fileID: 9050251091063357775, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2
@@ -2432,6 +2436,10 @@ PrefabInstance:
       propertyPath: explosionEffectPrefab
       value: 
       objectReference: {fileID: 2892374319492241680, guid: b0cd241ba68ff52e38760352702647c0, type: 3}
+    - target: {fileID: 5715303934104870837, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 46efe1fc45582654a8191e2e3db8a5d7, type: 2}
     - target: {fileID: 9050251091063357775, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.65
@@ -3348,7 +3356,7 @@ Animator:
   m_GameObject: {fileID: 1908860495}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c7f542980fd6f87a094133a6ffc1f78b, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5bc4b843badad314f9240d612b93faa5, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3393,9 +3401,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd85cafe0d42128488de92088eae13ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimatorController
-  animator: {fileID: 1908860503}
-  movement: {fileID: 1908860500}
-  health: {fileID: 1908860504}
+  animator: {fileID: 0}
+  movement: {fileID: 0}
+  health: {fileID: 0}
   runSpeedThreshold: 0.1
 --- !u!114 &1908860506
 MonoBehaviour:
@@ -3523,6 +3531,26 @@ PrefabInstance:
       propertyPath: explosionEffectPrefab
       value: 
       objectReference: {fileID: 2892374319492241680, guid: b0cd241ba68ff52e38760352702647c0, type: 3}
+    - target: {fileID: 4551929392044699316, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
+      propertyPath: m_Size.x
+      value: 0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 4551929392044699316, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
+      propertyPath: m_Size.y
+      value: 0.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 4551929392044699316, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 6333512710892911101, guid: fec6483ceb3255340af983d1563fde67, type: 3}
+    - target: {fileID: 4551929392044699316, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5715303934104870837, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 46efe1fc45582654a8191e2e3db8a5d7, type: 2}
     - target: {fileID: 9050251091063357775, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.64
@@ -3862,6 +3890,26 @@ PrefabInstance:
       propertyPath: explosionEffectPrefab
       value: 
       objectReference: {fileID: 2892374319492241680, guid: b0cd241ba68ff52e38760352702647c0, type: 3}
+    - target: {fileID: 4551929392044699316, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
+      propertyPath: m_Size.x
+      value: 0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 4551929392044699316, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
+      propertyPath: m_Size.y
+      value: 0.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 4551929392044699316, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 6333512710892911101, guid: fec6483ceb3255340af983d1563fde67, type: 3}
+    - target: {fileID: 4551929392044699316, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5715303934104870837, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 46efe1fc45582654a8191e2e3db8a5d7, type: 2}
     - target: {fileID: 9050251091063357775, guid: c5d20066479d16092a2a6026ee652d45, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.85
